@@ -2,7 +2,7 @@
 Variational circuits play a role in quantum machine learning akin to that of neural networks in classical machine learning. They typically have a layered structure, and a set of tunable parameters that are learned through training with a classical optimization algorithm. Data is input to the circuit by embedding it into the state of a quantum device, and measurement results inform the classical optimizer how to adjust the parameters. The circuit structure, optimization method, and how data is encoded in the circuit varies heavily across algorithms, and there are often problem-speciﬁc considerations that aﬀect how they are trained.
 
 
-The input of the program are the 3 dimension of the image and the labels they represent i.e. -1,0 and 1.
+The below algorithm is executed in pennylane quantum language. The input of the program are the 3 dimension of the image and the labels they represent i.e. -1,0 and 1.
 Whereas the output is the string of predicted labels based on the test dimension.  
 
 ## Input
