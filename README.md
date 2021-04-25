@@ -17,4 +17,4 @@ The data has all been concatenated into a single string.
 The output of the program is a string similar to one in the ﬁle answer.ans containing the predicted labels for the testing data separated by commas.
 The accuracy of 98% was achieved by using this model and a custom-built ansatz function for classifying the data.
 
-<img src="VQC_output.PNG" height="300" width="450">
+<img src="VQC_output.JPG" height="300" width="450">
