@@ -53,6 +53,7 @@ def classify_data(X_train, Y_train, X_test):
                     maxi=p[k]
                     indexMax=k
             predictions[i]=indexMax-1
+        
         return predictions
 
     
@@ -90,9 +91,9 @@ def classify_data(X_train, Y_train, X_test):
     bestcost=1
     opt = AdamOptimizer(0.425)
     batch_size = 10
-
+    Hist=[]
     for it in range(30):
-
+        
         # Update the weights by one optimizer step
         batch_index = np.random.randint(0, 250, (batch_size,))
         X_train_batch = X_train[batch_index]
@@ -105,13 +106,12 @@ def classify_data(X_train, Y_train, X_test):
         cosT = cost(params, X_train,Y_train)
         # Compute accuracy on train and validation set
         acc = accuracy(params, X_train,Y_train) 
+        Hist.append(acc)
         if cosT < bestcost:
             bestcost = cosT
             bestparams = params
-
-        if acc>0.97:
-            break
-
+        
+        
         print(
             "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.2f}% ".format(
             it + 1, cosT, acc*100
@@ -121,10 +121,12 @@ def classify_data(X_train, Y_train, X_test):
     results =[1,0,-1,0,-1,1,-1,-1,0,-1,1,-1,0,1,0,-1,-1,0,0,1,1,0,-1,0,0,-1,0,-1,0,0,1,1,-1,-1,-1,0,-1,0,1,0,-1,1,1,0,-1,-1,-1,-1,0,0]
 
     accResult = accuracy(bestparams,X_test,results)
-    
+    print()
     print("FINAL ACCURACY: {:0.2f}%".format(accResult*100))
-
-    return array_to_concatenated_string(predictions)
+    circuit(bestparams, X_train[0])
+    print()
+    print(circuit.draw())
+    return array_to_concatenated_string(predictions), accuracy
 
 
 def array_to_concatenated_string(array):
