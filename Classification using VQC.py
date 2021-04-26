@@ -3,7 +3,7 @@ import sys
 import pennylane as qml
 import numpy as np
 from pennylane.optimize import NesterovMomentumOptimizer, AdamOptimizer
-
+import matplotlib.pyplot as plt
 
 def classify_data(X_train, Y_train, X_test):
     """Develop and train variational quantum classifier.
@@ -91,7 +91,8 @@ def classify_data(X_train, Y_train, X_test):
     bestcost=1
     opt = AdamOptimizer(0.425)
     batch_size = 10
-    Hist=[]
+    Diag_Cost = []
+    Diag_Acc = []
     for it in range(30):
         
         # Update the weights by one optimizer step
@@ -106,12 +107,13 @@ def classify_data(X_train, Y_train, X_test):
         cosT = cost(params, X_train,Y_train)
         # Compute accuracy on train and validation set
         acc = accuracy(params, X_train,Y_train) 
-        Hist.append(acc)
+        
         if cosT < bestcost:
             bestcost = cosT
             bestparams = params
-        
-        
+
+        Diag_Cost.append(cosT.numpy())
+        Diag_Acc.append(acc)
         print(
             "Iter: {:5d} | Cost: {:0.7f} | Accuracy: {:0.2f}% ".format(
             it + 1, cosT, acc*100
@@ -126,7 +128,7 @@ def classify_data(X_train, Y_train, X_test):
     circuit(bestparams, X_train[0])
     print()
     print(circuit.draw())
-    return array_to_concatenated_string(predictions), accuracy
+    return array_to_concatenated_string(predictions), Diag_Cost, Diag_Acc
 
 
 def array_to_concatenated_string(array):
@@ -169,9 +171,54 @@ def parse_input(giant_string):
 
     return X_train, Y_train, X_test
 
+def plot_data(Diag_Cost, Diag_Acc, EPOCHS):
+    loss_train = Diag_Cost
+    acc_train = Diag_Acc
+    epochs = range(1,EPOCHS+1)
+    plt.plot(epochs, loss_train, 'g', label='Training loss')
+    plt.plot(epochs, acc_train, 'r', label='Training Accuracy')
+    plt.title('Training metrics')
+    plt.xlabel('Epochs')
+    plt.ylabel('Loss and Accuracy')
+    plt.legend()
+    plt.show()
+
+def visualize_input_data(X_train, Y_train):
+    x1=[]
+    x2=[]
+    x3=[]
+    y1=[]
+    y2=[]
+    y3=[]
+    z1=[]
+    z2=[]
+    z3=[]
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    for i in range(len(Y_train)):
+        if (Y_train[i]==1):
+            x1.append(X_train[i,0])
+            y1.append(X_train[i,1])
+            z1.append(X_train[i,2])
+
+        if (Y_train[i]==0):
+            x2.append(X_train[i,0])
+            y2.append(X_train[i,1])
+            z2.append(X_train[i,2])
+
+        if (Y_train[i]==-1):
+            x3.append(X_train[i,0])
+            y3.append(X_train[i,1])
+            z3.append(X_train[i,2])
+    ax.scatter(x1,y1,z1, c='red')
+    ax.scatter(x2,y2,z2, c='green')
+    ax.scatter(x3,y3,z3, c='blue')
+    plt.show()
+
 
 if __name__ == "__main__":
 
     X_train, Y_train, X_test = parse_input(sys.stdin.read())
-    output_string = classify_data(X_train, Y_train, X_test)
-    print(f"{output_string}")
+    visualize_input_data(X_train, Y_train)
+    output_string, Diag_Cost, Diag_Acc = classify_data(X_train, Y_train, X_test)
+    plot_data(Diag_Cost, Diag_Acc, 30)
