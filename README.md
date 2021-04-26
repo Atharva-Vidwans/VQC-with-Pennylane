@@ -6,6 +6,10 @@ Variational circuits play a role in quantum machine learning akin to that of neu
 The below algorithm is executed in pennylane quantum language. The input to the program is a image with reduced dimensions to 3 features using PCA and categorical encoding of -1,0 and 1 are used. 
 Whereas the output is the string of predicted labels based on the test dimension.  
 
+The Ansatz used for the classification is given below, 
+
+<img src="Ansatz.JPG" height="150" width="500">
+
 ## Input
 The ﬁle input.in consists of 3 parts:
 1. A set of training data points with dimensions (250, 3)
@@ -14,7 +18,12 @@ The ﬁle input.in consists of 3 parts:
 The data has all been concatenated into a single string. 
 
 ## Output
-The output of the program is a string similar to one in the ﬁle answer.ans containing the predicted labels for the testing data separated by commas.
-The accuracy of 100% was achieved. While training the model the best parameters were saved in a variable and the same were used for testing the model.
 
-<img src="VQC_output.JPG" height="300" width="450">
+##### The accuracy of 100% was achieved. While training the model the best parameters were saved in a variable and the same were used for testing the model.
+
+<img src="VQC_output_with_graph.JPG" height="300" width="450">
+
+##### Visuzlization of Cost and Accuracy on every epoch is given below,
+
+<img src="graph.JPG" height="300" width="450">
+
